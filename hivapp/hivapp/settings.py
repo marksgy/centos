@@ -132,9 +132,9 @@ STATIC_URL = './static/'
 STATIC_ROOT ='./static/'
 
 # weixinapp addtion
-WXAPP_ID = 'wxc066d762e4dd7357'
+WXAPP_ID = ''
 
-WXAPP_SECRET = '7bba3ab00edb1c153139f3d75a0020ed'
+WXAPP_SECRET = ''
 
 WXAPP_TOKE = ''
 GRANT_TYPE = 'authorization_code'

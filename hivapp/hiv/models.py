@@ -35,6 +35,7 @@ class OrderInfo(models.Model):
     methods = models.CharField(max_length=20)
     userid = models.CharField(max_length=200)
     serviceid = models.CharField(max_length=200)
+    isdeleted = models.IntegerField(default=1)
 
     def __str__(self):
         return "Insert Order Infomatioin: %s" % self.rd3

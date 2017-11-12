@@ -4,7 +4,7 @@ from channels.sessions import enforce_ordering, channel_session
 from django.db.models import Count
 
 from .models import People, ChatMessage, ChatList
-from oflMsgForm.myFuncs.sendForm import sendForm
+from hivapp.oflMsgForm.myFuncs import sendForm
 from ..hiv.models import UserInfo
 
 
@@ -49,7 +49,7 @@ def msg_consumer(message):
         })
         chatmessage.issent = 1
     else:
-        sendForm("session")
+        sendForm(toid)
         chatmessage.issent = 0
     chatmessage.save()
 
@@ -89,7 +89,7 @@ def ws_message(message):
         mymsg = []
         # 取出历史消息列表~ok！
         for chatlist in chatlists:
-            filters = chatmsgs.filter(chatlist=chatlist).order_by(-'time')
+            filters = chatmsgs.filter(chatlist=chatlist).order_by('-time')
             lastMessage = filters[0].text
             unreadCount = filters.count()
             lastSendTime = filters[0].time.strftime('%Y-%m-%d %H:%M')

@@ -4,6 +4,7 @@ from .models import ChatList,ChatMessage
 from datetime import datetime
 from hiv.models import UserInfo
 # Create your views here.
+# 历史消息
 def history(request):
     if request.method == "POST":
         time=datetime.fromtimestamp(int(request.POST.get("time","0")))
@@ -29,3 +30,6 @@ def history(request):
             }
             chat.append(onemsg)
         return JsonResponse({"msgs":chat})
+
+def changeTime(requests):
+    # 写个装饰器

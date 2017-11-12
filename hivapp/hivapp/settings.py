@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'hiv',
     'channels',
     'instantmsg',
+    'oflMsgForm'
 ]
 
 MIDDLEWARE = [

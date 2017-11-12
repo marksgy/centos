@@ -6,7 +6,7 @@ from hivapp import settings
 from hiv.tools.exception import Forbidden
 from hiv.tools import logger
 from hiv.models import SessionInfo
-from hiv.views import getUserInfo
+from hiv.tools.loginapi import getUserInfo
 
 
 def Get_Authorization(self,request):

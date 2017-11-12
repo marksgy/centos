@@ -1,19 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from requests import session
 
-from hivapp.hiv.tools.login import loginCk
-from hivapp.hiv.tools.message import sendMsg, checkMsg
-from hivapp.hiv.tools.signupFunc import signUpDb
+
+from hiv.tools.decorator import check_rd3_decorator
+from hiv.tools.login import loginCk
+from hiv.tools.message import sendMsg, checkMsg
+from hiv.tools.signupFunc import signUpDb
 from .tools import logger
 from .tools.loginapi import getUserInfo
-from .tools.verification import Verify_Rd3
-from .tools.exception import Unauthorized
+
 from .models import OrderInfo, SessionInfo, UserInfo, Place, People
 from .tools import mapfunc
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
+
 
 
 def index(request):
@@ -59,7 +58,7 @@ def GeneratePlaceTime(request):
 
 
 # 生成订单
-@getUserInfo.check_rd3_decorator
+@check_rd3_decorator
 def GenerateOrder(request):
     if request.method == "POST":
         createtime = request.POST.get('createtime')
@@ -78,7 +77,7 @@ def GenerateOrder(request):
 
 
 # 获取历史订单
-@getUserInfo.check_rd3_decorator
+@check_rd3_decorator
 def GetOrder(request):
 
     rd3 = request.POST.get('access_token')
@@ -118,7 +117,7 @@ def GetOrder(request):
 
     return JsonResponse({"orderInfo":orderInfo})
 
-@getUserInfo.check_rd3_decorator
+@check_rd3_decorator
 def deleteOrder(request):
     id = request.POST.get('id')
     order=OrderInfo.objects.get(id=id)
@@ -126,7 +125,7 @@ def deleteOrder(request):
     order.save()
     return HttpResponse(200)
 
-@getUserInfo.check_rd3_decorator
+@check_rd3_decorator
 def orderState(request):
     id = request.POST.get('id')
     state=request.POST.get('state')
@@ -135,7 +134,7 @@ def orderState(request):
     order.save()
     return HttpResponse(200)
 
-@getUserInfo.check_rd3_decorator
+@check_rd3_decorator
 def BeService(request):
     if request.method == "POST":
 
@@ -152,13 +151,13 @@ def BeService(request):
         else:
             return JsonResponse({"code": 0})
 
-@getUserInfo.check_rd3_decorator
+@check_rd3_decorator
 def sendmsg(request):
     phone = request.POST.get("tel", 0)
     sendMsg(phone)
     return HttpResponse(200)
 
-@getUserInfo.check_rd3_decorator
+@check_rd3_decorator
 def checkmsg(request):
     phone = request.POST.get("tel", 0)
     code = request.POST.get("code",0)
@@ -167,12 +166,12 @@ def checkmsg(request):
     else:
         return JsonResponse({"check_code": 1})
 
-@getUserInfo.check_rd3_decorator
+@check_rd3_decorator
 def sign(request):
     if request.method=="POST":
         return signUpDb(request)
 
 
-@getUserInfo.check_rd3_decorator
+@check_rd3_decorator
 def mylogin(request):
     return loginCk(request)

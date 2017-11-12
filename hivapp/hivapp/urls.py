@@ -15,29 +15,30 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from hiv import views as views
+from hiv import views as hivviews
 from instantmsg import views as instantmsg
 
 urlpatterns = [
-    #url(r'^wx/', admin.site.urls),
+    url(r'^wx/', admin.site.urls),
     #url(r'^auth/user/api/rd3',views.get_rd3_userinfo, name='rd3'),
-    url(r'^$', views.index, name='home'),
+    url(r'^$', hivviews.index, name='home'),
     #url(r'^login/', views.index, name='home'),
-    url(r'^login', views.login, name='code'),
-    url(r'^sendmsg', views.sendmsg, name='sendmsg'),
-    url(r'^checkmsg', views.deleteOrder, name='checkmsg'),
-    url(r'^sign', views.sign, name='sign'),
-    url(r'^mylogin', views.mylogin, name='mylogin'),
+    url(r'^login', hivviews.login, name='code'),
 
-    url(r'^placetime', views.GeneratePlaceTime, name='GeneratePlaceTime'),
+    url(r'^sendmsg', hivviews.sendmsg, name='sendmsg'),
+    url(r'^checkmsg', hivviews.deleteOrder, name='checkmsg'),
+    url(r'^sign', hivviews.sign, name='sign'),
+    url(r'^mylogin', hivviews.mylogin, name='mylogin'),
 
-    url(r'^generateorder', views.GenerateOrder, name='GenerateOrder'),
-    url(r'^getorder', views.GetOrder, name='getOrder'),
-    url(r'^deleteorder', views.deleteOrder, name='deleteOrder'),
-    url(r'^orderstate', views.orderState, name='orderState'),
+    url(r'^placetime', hivviews.GeneratePlaceTime, name='GeneratePlaceTime'),
+
+    url(r'^generateorder', hivviews.GenerateOrder, name='GenerateOrder'),
+    url(r'^getorder', hivviews.GetOrder, name='getOrder'),
+    url(r'^deleteorder', hivviews.deleteOrder, name='deleteOrder'),
+    url(r'^orderstate', hivviews.orderState, name='orderState'),
 
 
-    url(r'^beservice', views.BeService, name='BeService'),
+    url(r'^beservice', hivviews.BeService, name='BeService'),
 
 
 

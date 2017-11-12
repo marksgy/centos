@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
-from hivapp.hiv.models import UserInfo, SessionInfo
-from hivapp.hiv.tools.exception import Unauthorized
-from hivapp.hiv.tools.verification import Verify_Rd3
+from hiv.models import UserInfo, SessionInfo
+from hiv.tools.exception import Unauthorized
+from hiv.tools.verification import Verify_Rd3
 from .models import peopleFormid
 # Create your views here.
 

@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
 import importlib
+
+from hivapp.hiv.models import OrderInfo
+from hivapp.hiv.tools.verification import Verify_Rd3
+from hivapp.oflMsgForm.views import getFormId
+
 importlib.reload(sys)
 import jwt
 import logging
@@ -17,6 +22,19 @@ from hiv.tools import logger
 
 
 class getUserInfo(object):
+
+    def check_rd3_decorator(func):
+        def wapper(*args,**kwargs):
+            request=args[0]
+            rd3 = request.POST.get('access_token')
+            # 先检测jwt是否是有效请求
+            effection = Verify_Rd3(rd3)
+            if effection:
+                getFormId(request)
+                return func(*args,**kwargs)
+            if not effection:
+                raise Unauthorized('reregister')
+
     # 获取从客户端请求的code
     def GetCode(request):
         if request.method == "POST":

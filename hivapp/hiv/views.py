@@ -1,10 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from requests import session
+
+from hivapp.hiv.tools.login import loginCk
+from hivapp.hiv.tools.message import sendMsg, checkMsg
+from hivapp.hiv.tools.signupFunc import signUpDb
 from .tools import logger
 from .tools.loginapi import getUserInfo
 from .tools.verification import Verify_Rd3
 from .tools.exception import Unauthorized
-from .models import OrderInfo, SessionInfo, UserInfo, Place
+from .models import OrderInfo, SessionInfo, UserInfo, Place, People
 from .tools import mapfunc
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -75,31 +80,97 @@ def GenerateOrder(request):
 # 获取历史订单
 @getUserInfo.check_rd3_decorator
 def GetOrder(request):
+
     rd3 = request.POST.get('access_token')
     userid = UserInfo.objects.get(openid=SessionInfo.objects.get(rd3=rd3).openid).id
-    orders = OrderInfo.objects.filter(userid=userid) | OrderInfo.objects.filter(serviceid=userid)
+    orders = OrderInfo.objects.filter(userid=userid).filter(isdeleted=0) | OrderInfo.objects.filter(serviceid=userid).filter(isdeleted=0)
+
+    orderInfo=[]
 
     for ord in orders:
-        create_time = ord.create_time
-        finish_time = ord.finish_time
+        create_time = ord.create_time.strftime('%Y-%m-%d %H:%M')
+        finish_time = ord.finish_time.strftime('%Y-%m-%d %H:%M')
         place = ord.place
         methods = ord.methods
-        if ord.userid == userid:
-            serviceid = ord.serviceid
-            service_provider = UserInfo.objects.get(id=serviceid)
-            nickname = service_provider.nickname
-            photo = service_provider.vatarUrl
-        else:
-            userid = ord.userid
-            user = UserInfo.objects.get(id=userid)
-            nickname = user.nickname
-            photo = user.vatarUrl
+        state=ord.state
+        serviceid = ord.serviceid
+        userid=ord.userid
+        orderid=ord.id
+        service_provider = UserInfo.objects.get(id=serviceid)
+        service_nickname = service_provider.nickname
+
+        user = UserInfo.objects.get(id=userid)
+        user_nickname = user.nickname
+
+
+
+        orderinfo={
+            "id":orderid,
+            "place":place,
+            "methods":methods,
+            "create_time":create_time,
+            "finish_time":finish_time,
+            "service_nickname":service_nickname,
+            "user_nickname": user_nickname,
+            "state": state
+        }
+        orderInfo.append()
+
+    return JsonResponse({"orderInfo":orderInfo})
+
+@getUserInfo.check_rd3_decorator
+def deleteOrder(request):
+    id = request.POST.get('id')
+    order=OrderInfo.objects.get(id=id)
+    order.isdeleted=1
+    order.save()
+
+@getUserInfo.check_rd3_decorator
+def orderState(request):
+    id = request.POST.get('id')
+    state=request.POST.get('state')
+    order = OrderInfo.objects.get(id=id)
+    order.state=state
+    order.save()
 
 @getUserInfo.check_rd3_decorator
 def BeService(request):
     if request.method == "POST":
-        rd3 = request.POST.get('access_token')
-        userid = UserInfo.objects.get(openid=SessionInfo.objects.get(rd3=rd3).openid).id
 
         tel = request.POST.get('tel')
-        
+
+        isExist = People.objects.filter(tel=tel)
+
+        if isExist:
+            rd3 = request.POST.get('access_token')
+            user = UserInfo.objects.get(openid=SessionInfo.objects.get(rd3=rd3).openid)
+            user.isServiceP=1
+            user.save()
+            return JsonResponse({"code": 1})
+        else:
+            return JsonResponse({"code": 0})
+
+@getUserInfo.check_rd3_decorator
+def sendmsg(request):
+    phone = request.POST.get("tel", 0)
+    sendMsg(phone)
+    return HttpResponse(200)
+
+@getUserInfo.check_rd3_decorator
+def checkmsg(request):
+    phone = request.POST.get("tel", 0)
+    code = request.POST.get("code",0)
+    if checkMsg(phone,code)!=200:
+        return JsonResponse({"check_code": 0})
+    else:
+        return JsonResponse({"check_code": 1})
+
+@getUserInfo.check_rd3_decorator
+def sign(request):
+    if request.method=="POST":
+        return signUpDb(request)
+
+
+@getUserInfo.check_rd3_decorator
+def mylogin(request):
+    return loginCk(request)

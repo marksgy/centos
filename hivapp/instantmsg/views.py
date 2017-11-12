@@ -31,5 +31,3 @@ def history(request):
             chat.append(onemsg)
         return JsonResponse({"msgs":chat})
 
-def changeTime(requests):
-    # 写个装饰器

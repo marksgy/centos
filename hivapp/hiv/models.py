@@ -22,7 +22,10 @@ class UserInfo(models.Model):
     country = models.CharField(max_length=20)
     vatarUrl = models.CharField(max_length=200)
     time = models.DateTimeField(default=timezone.now)
+    tel = models.CharField(max_length=11,blank=True)
+    psd = models.CharField(max_length=6,blank=True)
     isServiceP= models.IntegerField(default=0)
+    state= models.IntegerField(default=0)
 
     def __str__(self):
         return "Insert User Infomatioin: %d" % self.pk
@@ -35,7 +38,9 @@ class OrderInfo(models.Model):
     methods = models.CharField(max_length=20)
     userid = models.CharField(max_length=200)
     serviceid = models.CharField(max_length=200)
-    isdeleted = models.IntegerField(default=1)
+    isdeleted = models.IntegerField(default=0)
+    state= models.IntegerField(default=0)
+
 
     def __str__(self):
         return "Insert Order Infomatioin: %s" % self.rd3

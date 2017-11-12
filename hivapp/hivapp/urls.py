@@ -24,7 +24,26 @@ urlpatterns = [
     url(r'^$', views.index, name='home'),
     #url(r'^login/', views.index, name='home'),
     url(r'^login', views.login, name='code'),
+    url(r'^sendmsg', views.sendmsg, name='sendmsg'),
+    url(r'^checkmsg', views.deleteOrder, name='checkmsg'),
+    url(r'^sign', views.sign, name='sign'),
+    url(r'^mylogin', views.mylogin, name='mylogin'),
+
+    url(r'^placetime', views.GeneratePlaceTime, name='GeneratePlaceTime'),
+
+    url(r'^generateorder', views.GenerateOrder, name='GenerateOrder'),
+    url(r'^getorder', views.GetOrder, name='getOrder'),
+    url(r'^deleteorder', views.deleteOrder, name='deleteOrder'),
+    url(r'^orderstate', views.orderState, name='orderState'),
+
+
+    url(r'^beservice', views.BeService, name='BeService'),
+
+
+
     url(r'^history', instantmsg.history, name='history'),
+
+
     #url(r'^pulics/login',views.ogin, name='login'),
     #url(r'^pulics/time', views.GenerateTime, name='time'),
     #url(r'^publics/place',views.GenetePlace, name='place'),

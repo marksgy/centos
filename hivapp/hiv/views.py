@@ -124,6 +124,7 @@ def deleteOrder(request):
     order=OrderInfo.objects.get(id=id)
     order.isdeleted=1
     order.save()
+    return HttpResponse(200)
 
 @getUserInfo.check_rd3_decorator
 def orderState(request):
@@ -132,6 +133,7 @@ def orderState(request):
     order = OrderInfo.objects.get(id=id)
     order.state=state
     order.save()
+    return HttpResponse(200)
 
 @getUserInfo.check_rd3_decorator
 def BeService(request):

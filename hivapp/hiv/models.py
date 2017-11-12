@@ -39,7 +39,7 @@ class OrderInfo(models.Model):
     userid = models.CharField(max_length=200)
     serviceid = models.CharField(max_length=200)
     isdeleted = models.IntegerField(default=0)
-    state= models.IntegerField(default=0)
+    state= models.IntegerField(default=1)
 
 
     def __str__(self):
